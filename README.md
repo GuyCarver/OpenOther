@@ -8,6 +8,8 @@
 
 If an "extensions" settings entry exists for the view files are search 1st forward in the list from the current extenstion then forward from the beginning of the list to the current extension.
 
+NOTE: The Extensions settings are usually set by the language package.
+
 ### Key Bindings:
 
 * f11 = Open another file.
