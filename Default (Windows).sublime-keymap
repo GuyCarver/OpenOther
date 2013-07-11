@@ -1,3 +1,4 @@
 [
+	{ "keys": ["browser_refresh"], "command": "open_other" },
 	{ "keys": ["f11"], "command": "open_other" }
 ]
