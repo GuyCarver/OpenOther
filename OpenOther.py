@@ -50,24 +50,65 @@ class OpenOtherCommand(sublime_plugin.WindowCommand):
             fext = fext[1:] #Get rid of the '.'.
             # print("looking for " + fext)
             if fext in exts :
-              index = exts.index(fext)
+              exts.remove(fext)
 
-              def iterexts( aList ) :
-                for testext in aList :
-                  # print("checking " + testext)
-                  fname = fpath + '.' + testext
-                  if os.path.exists(fname):
-                    # print("found " + fname)
-                    if self.window.open_file(fname) :
-                      return True
-                return False
+          def good( aEntry ) :
+            fname = fpath + '.' + aEntry
+            return os.path.exists(fname)
 
-              #Search from this point to end.
-              if index < len(exts) - 1 :
-                if iterexts(exts[index + 1:]) :
-                  return
+          items = [ x for x in exts if good(x) ]
 
-              #Search from this point to beginning.
-              if index > 0 :
-                if iterexts(exts[:index]) :
-                   return
+          def done( index ) :
+            if index >= 0 :
+              fname = fpath + '.' + items[index]
+              self.window.open_file(fname)
+
+          l = len(items)
+          if l > 1:
+#            def preview( index ) :
+#              if index >= 0:
+#                fname = fpath + '.' + items[index]
+#                self.window.open_file(fname, sublime.TRANSIENT)
+
+            #open a selection prompt
+            self.window.show_quick_panel(items, done)
+          elif l :
+            done(0)
+
+#class OpenOtherCommand(sublime_plugin.WindowCommand):
+#  def run( self ) :
+#    vw = self.window.active_view()
+#    if not vw.is_scratch() :
+#      fname = vw.file_name()
+#      if fname :
+#        #Read the extensions setting from the view.
+#        exts = vw.settings().get("extensions")
+#        if exts :
+#          # print("checking " + str(exts))
+#          #Get the extension of the current file.
+#          fpath, fext = os.path.splitext(fname)
+#          if fext :
+#            fext = fext[1:] #Get rid of the '.'.
+#            # print("looking for " + fext)
+#            if fext in exts :
+#              index = exts.index(fext)
+#
+#              def iterexts( aList ) :
+#                for testext in aList :
+#                  # print("checking " + testext)
+#                  fname = fpath + '.' + testext
+#                  if os.path.exists(fname):
+#                    # print("found " + fname)
+#                    if self.window.open_file(fname) :
+#                      return True
+#                return False
+#
+#              #Search from this point to end.
+#              if index < len(exts) - 1 :
+#                if iterexts(exts[index + 1:]) :
+#                  return
+#
+#              #Search from this point to beginning.
+#              if index > 0 :
+#                if iterexts(exts[:index]) :
+#                   return
